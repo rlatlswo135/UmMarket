@@ -1,10 +1,15 @@
 /* eslint-disable*/
-import './App.css';
+
+import React, {useState} from 'react'
+import './Css/App.css';
 import { BrowserRouter,Switch,Route } from 'react-router-dom'
 import Main from './Component/Main'
 import NavBar from './Component/NavBar'
 import ItemDetail from './Component/ItemDetail';
+import data from './data'
 function App() {
+  let [shopData ,setShopData] = useState(data)
+
   /* 
   오류 NavBar안에 Link컴포넌트가 쓰엿는데 NavBar컴포넌트를 Switch(Router)컴포넌트 밖에다쓰니
   url만 바뀌고(컴파일시 앵커태그로 나오니까) 컴포넌트는 렌더링하지않았다 그러니
@@ -15,11 +20,11 @@ function App() {
     <div className="App">
       <NavBar/>
       <Switch>
-        <Route exact path="/" component={Main} />
-        <Route path="/detail" component={ItemDetail} />
-        <Route path="/:id">
+        <Route exact path="/" render={()=><Main props={shopData}/>} />
+        <Route path="/detail/:id" render={()=> <ItemDetail props={shopData}/>} />
+        {/* <Route path="/:id">
           <div>sdfds</div>
-        </Route>
+        </Route> */}
       </Switch>
 
       {/* <Route path="/path" component={Component}></Route> */}

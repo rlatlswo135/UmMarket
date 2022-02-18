@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+// CSS에 약간 reset시켜놓고 하는느낌 => 이건 자주쓰는거니 scss에서 @import로 응용되겟지?
+
+$title_color: #33b2ff;
+
+.scss {
+  color: $title_color;
+}
+
+// CSS 셀렉터
+
+div h4 {
+  color: aqua;
+}
+//둘은 동일 즉 셀렉터가 길어지면 한눈에 파악하기 어려울수있으니 직관적으로 나눌수있다 (scss 내스팅문법)
+div {
+  h4 {
+    color: aqua;
+  }
+}
+
+.scssV2 {
+  background-color: pink;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+}
+//ex3
+.scssV3 {
+  @extend .scssV2;
+  background-color: yellow;
+}
+
+//함수마냥 선언한뒤 쓰고싶은곳에서 호출하는데 js하듯이 호출하지말고 @include 키워드를 붙여서 호출하면 안에내용이 return되는 느낌
+@mixin funName() {
+  background-color: pink;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+}
+
+.scssV4 {
+  @include funName();
+  background-color: green;
+}
+
+/*
+SCSS를 쓰는이유 -> CSS를 프로그래밍 하듯이 짤수있다 즉 중복을 없앨수있다는거.
+
+ex1) 자주쓰는 컬러코드나 일정한 픽셀값 등을 다 외우기힘드니 변수에 담아서쓰거나
+ex2) 자주쓰는 템플릿은 따로 .scss파일에 저장해서 -> scss문법인 @import를 해서 쓰거나 할수있다. 마치 js import하듯이
+ex3) 비슷한 템플릿의 코드는 extend 문법을통해 상속할수있다 클래스마냥 (비슷한 @mixin - @include)
+*/

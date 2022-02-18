@@ -1,12 +1,9 @@
 /* eslint-disable*/
 import {Button} from 'react-bootstrap'
 import React, {useState} from 'react';
-import data from '../data'
 import ItemList from './ItemList'
 
-function Main() {
-  let [shopData ,setShopData] = useState(data)
-
+function Main({props}) {
   function Jumbotron(){
     return (
       <div className="Jumbotron">
@@ -24,7 +21,7 @@ function Main() {
       <Jumbotron></Jumbotron>
       <div className="container">
         <div className="row">
-          <ItemList props={shopData}/>
+          <ItemList props={props}/>
         </div>
       </div>
     </>

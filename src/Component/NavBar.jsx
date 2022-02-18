@@ -1,6 +1,6 @@
 /* eslint-disable*/
 import { Button,Container,Navbar,Nav,NavDropdown } from 'react-bootstrap';
-import '../App.css';
+import '../Css/App.css';
 import {Link} from 'react-router-dom'
 
 function NavBar(){

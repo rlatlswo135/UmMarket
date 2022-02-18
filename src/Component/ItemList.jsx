@@ -1,8 +1,9 @@
 function ItemList({props}){
     //bootstrap문법
     return(
+      //그러니 얘도 Link를 /detail/item.id로 보내야겟지? 
       props.map(item => {
-        return (
+        return ( 
           <div key={item.id} className="col-md-4">
             <img src={`${item.img}`} width="100%"></img>
             <h4>{item.title}</h4>
