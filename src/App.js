@@ -9,6 +9,15 @@ import ItemDetail from './Component/ItemDetail';
 import data from './data'
 function App() {
   let [shopData ,setShopData] = useState(data)
+  let [stock, setStock] = useState(100)
+  /*
+  App => ItemDetail => StockInfo 순으로 state전달 계단식으로밖에안됨
+  그럼 App에 state를 set하기위한 함수역시 저렇게 계단순으로 전송해야.
+  그럼 Component가 많을수록 state도 많아지고 그러면 위에처럼 상태관리도 복잡하잖아?
+
+  그래서 이용하는게 Context API or Redux (상태관리 라이브러리들)
+  2.20 => redux배울차례
+  */
 
   /* 
   오류 NavBar안에 Link컴포넌트가 쓰엿는데 NavBar컴포넌트를 Switch(Router)컴포넌트 밖에다쓰니
@@ -20,8 +29,8 @@ function App() {
     <div className="App">
       <NavBar/>
       <Switch>
-        <Route exact path="/" render={()=><Main props={shopData}/>} />
-        <Route path="/detail/:id" render={()=> <ItemDetail props={shopData}/>} />
+        <Route exact path="/" render={()=><Main props={shopData} setProps={setShopData}/>} />
+        <Route path="/detail/:id" render={()=> <ItemDetail props={shopData} setStock={setStock} stock={stock}/>} />
         {/* <Route path="/:id">
           <div>sdfds</div>
         </Route> */}
