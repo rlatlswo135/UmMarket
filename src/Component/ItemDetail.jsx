@@ -8,6 +8,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import '../Css/Detail.scss'
 import {stock_context} from '../App'
+import { connect } from 'react-redux'
 // scss란 무엇일까?
 
 const Box = styled.div`
@@ -19,7 +20,10 @@ const Title = styled.h4`
 `
 // 하나의 청사진만있으면 원하는건 이렇게 props를 뚫어서 쓸수있겟네? 더다양한기능이있을까? => 공식문서참조
 
-function ItemDetail({props,stock,setStock}){
+function ItemDetail(props){
+  function dispatch(type,payload){
+    props.dispatch({type,payload})
+  }
   /*
   Context API 전달하려는쪽에서 React.createContext()로 context를 만들고
   제공하려는 Component를 context.Provider를 해주면 컴포넌트가 툭튀어나오고 value={state}옵션을 주면
@@ -39,7 +43,7 @@ function ItemDetail({props,stock,setStock}){
     obj.id => 내가찾는거 즉 useParams()함수는 내 parmas가담긴 obj를 return하는듯
     */
     let history = useHistory();
-    let [item] = props.filter(item => item.id === Number(id))
+    let [item] = props.props.filter(item => item.id === Number(id))
     /*
     filter를 쓴이유 => id를 parameter로 받아서 만약에 전체 data의 index로 detail페이지를 render한다면
     정렬기능이나 이런걸 추가했을때 index로하면 렌더되는 페이지가 id에따라 나와야하는데 정렬로인해 배열 순서가 바뀌어서
@@ -48,7 +52,7 @@ function ItemDetail({props,stock,setStock}){
    
     function StockInfo({props}){
       return(
-        <p>재고 : ${props}</p>
+        <p>재고 : {props}</p>
       )
     }
     function tabClick(state){
@@ -124,11 +128,13 @@ function ItemDetail({props,stock,setStock}){
             <h4 className="pt-5">{item.title}</h4>
             <p>{item.content}</p>
             <p>{item.price}</p>
-            <StockInfo props={stock}/>
+            <StockInfo props={props.stock}/>
             <button className="btn btn-danger" onClick={()=>{
               // 항상 state를 다시 set할때는 사본을 만들어서 하는게 안전하고 중요.
-              let copy = stock;
-              setStock(copy-1)
+              let copy = props.stock;
+              props.setStock(copy-1);
+              dispatch('cartAdd',{name:item.title});
+              history.push('/cart')
             }}>주문하기</button>
             <button className="btn btn-danger" onClick={()=>{
                 history.goBack();
@@ -160,4 +166,6 @@ function ItemDetail({props,stock,setStock}){
     )
 }
 
-export default ItemDetail
+// export default ItemDetail
+
+export default connect((store)=>{return {product:store.reducerImport1}})(ItemDetail)

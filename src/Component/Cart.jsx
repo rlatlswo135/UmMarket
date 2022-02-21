@@ -1,6 +1,6 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {Table} from 'react-bootstrap'
-import { connect } from 'react-redux';
+import { connect , useDispatch, useSelector} from 'react-redux';
 
 
 const Cart = (props) => {
@@ -8,12 +8,36 @@ const Cart = (props) => {
     //받아온 인자안에 아까 product(맨밑)이라는 key로 store데이터가 들어온 모오습
     console.log(props)
 
-    function dispatch(action,index){
-        return props.dispatch({type:action,index})
+    /*
+    -------> useSelector useDispatch <-------
+    let useSelector = useSelector((store) => store);
+    console.log(useSelector.reducer1 , reducer2)
+
+    reducer함수로 만든 store들이 나옴 인자로 콜백함수를 받는데 그 콜백함수의 인자에 만든 store들이 모여있다
+    
+    let disPatach = useDispatch() //마찬가지로 disPatch가 담겨있다
+
+    장점? => 밑에서 따로 connect를 이용해서 store를 props화 할필요도없고, 그러니 참조할때 props.dispatch등 이럴필요도없이
+    변수에 저장해놧으니 useSelector.name 등 간편하게 참조를할수있을거다
+    */
+
+
+    let [closeHover, setCloseHover] = useState([])
+    function dispatch(action,index=false,name){
+        return props.dispatch({type:action,index,payload:{name}})
         /*
         dispatch='보내다' 즉 내가 원하는 상태를 보내는의미인데 redux를 통해 가져온 store에 dispatch라는
         메소드를 이용하는데 dispatch는 인자로 reducer에 보낼 action을 받아서 보내는데 => index.html확인
         */
+    }
+    /*
+    store에따라 dispatch가 갈리는게아니라 container안에 store가 여러개 담기고
+    그 container에 dispatch함수가 걸리는듯 즉 store가 2개라고 각각의dispatch가 있는게 아니라는뜻.
+    그러니, 밑에 dispatch2함수는 동작이안되는거다 이미 위에 dispatch함수에서 store.dispatch를 정의해놧기때문에
+    */
+
+    function dispatch2(action){ //의미없는함수
+        return props.dispatch({alert:action})
     }
 
     return (
@@ -33,7 +57,13 @@ const Cart = (props) => {
                         <tbody key={`key${index}`}>
                             <tr>
                                 <td>{item.id}</td>
-                                <td>{item.name}</td>
+                                <td onMouseOver={()=>{
+                                    let copy = []
+                                    copy.push(index)
+                                    setCloseHover(copy)
+                                }}>{item.name}
+                                    {closeHover[0] === index ? <button onClick={()=>dispatch('remove',index,item.name)}>x</button> : null}
+                                </td>
                                 <td>{item.quan}</td>
                                 <td>
                                     <button onClick={()=>dispatch('+',index)}>+</button>
@@ -44,6 +74,14 @@ const Cart = (props) => {
                     )
                 })}
             </Table>
+            {props.alertState ?
+            <div className="scssV2">
+                <p>지금 구매시 신규할인 20%!</p>
+                {/* dispatch2로 하면 안먹히는데 그럼 dispatch함수는 1개여야하나? */}
+                <button onClick={()=>dispatch(false)} className="mt-3">close</button>
+            </div>
+            : null
+            }
         </div>
     );
 };
@@ -54,9 +92,17 @@ function reduxTest(store){
     */
     console.log('store')
     console.log(store)
+    /*
+    reducer함수가 단일(1개)일때는 받아온 인자가 그 reducer함수지만
+    복수일경우에는 인자가 obj자료형으로 넘어오고 그안에 reducer들이 있기때문에
+    인자.key로 해당 reducer를 참조해서 써야한다
+    */
+
     return {
         // props화 해서 리턴 => 사용하는 컴포넌트쪽에선 받아온 인자에 product key에 value안에 store정보가 들어있겟지?
-        product:store
+        product:store.reducerImport1,
+        alertState : store.reducerImport2
+        // 그럼 Cart 컴포넌트 안에 받는 props는 2개가있겟지?
     }
 }
 
@@ -68,4 +114,7 @@ export default connect((store)=>{return {product:store}})(Cart) => 같겟지?
 그리고 그 내보낸 store를 어떤 Component에 연결시킬지를 정하는 로직인듯보임
 connect(어떤형태로 store를 props화 시킬건지 정하는 함수)(그렇게해서 내보낸 props를 받을 Component)
 */
-// export default Cart;
+
+/* --------------방법2---------------(useSelector,useDispatch사용법)*/
+
+// export default Cart; => 위처럼 connect로 store를 props화시키는 함수는 필요없음
