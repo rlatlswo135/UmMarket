@@ -62,3 +62,17 @@ ex1) 자주쓰는 컬러코드나 일정한 픽셀값 등을 다 외우기힘드
 ex2) 자주쓰는 템플릿은 따로 .scss파일에 저장해서 -> scss문법인 @import를 해서 쓰거나 할수있다. 마치 js import하듯이
 ex3) 비슷한 템플릿의 코드는 extend 문법을통해 상속할수있다 클래스마냥 (비슷한 @mixin - @include)
 */
+
+// CSStrainsition에서 정한 class -enter => 동작시작시 적용할 CSS
+.myTransition-enter {
+  opacity: 0;
+}
+
+// class -enter-active => 동작중에 적용할 CSS
+.myTransition-enter-active {
+  opacity: 1;
+  transition: all 500ms;
+  //변할때 딜레이를 주는느낌 -> 0.5s에 걸쳐서 변함
+}
+
+//그럼 enter에서는 투명도가 0이고 동작시에는 1이니까 0->1로 변하는 transition이겟지?

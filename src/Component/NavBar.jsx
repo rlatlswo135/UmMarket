@@ -16,6 +16,7 @@ function NavBar(){
                 <Nav className="me-auto">
                 <Nav.Link as={Link} to="/">Home</Nav.Link>
                 <Nav.Link as={Link} to="/detail/0">Detail</Nav.Link>
+                <Nav.Link as={Link} to="/cart">Cart</Nav.Link>
                 {/*
                 <Nav.Link><Link to="/path">content</Link></Nav.Link>
                 이런형식으로 하니 컴파일을 거쳣을때 <a><a></a></a>이런 형태로 반환되서 경고가나왔다.

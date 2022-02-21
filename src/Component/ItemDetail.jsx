@@ -1,8 +1,13 @@
+import { useContext } from 'react'
+import { CSSTransition } from'react-transition-group'
+//css에 transition 기능을 좀더 쉽게사용하게하는 라이브러리 => 그럼원래의 사용법도 중요하게 알아둬야겟지?
+import {Nav} from 'react-bootstrap'
 import { useState,useEffect } from 'react'
 import { propTypes } from 'react-bootstrap/esm/Image'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import '../Css/Detail.scss'
+import {stock_context} from '../App'
 // scss란 무엇일까?
 
 const Box = styled.div`
@@ -15,6 +20,17 @@ const Title = styled.h4`
 // 하나의 청사진만있으면 원하는건 이렇게 props를 뚫어서 쓸수있겟네? 더다양한기능이있을까? => 공식문서참조
 
 function ItemDetail({props,stock,setStock}){
+  /*
+  Context API 전달하려는쪽에서 React.createContext()로 context를 만들고
+  제공하려는 Component를 context.Provider를 해주면 컴포넌트가 툭튀어나오고 value={state}옵션을 주면
+  해당 state를 공유하려는 컴포넌트들을 context.provider컴포넌트로 감싸게되면 모두다 그 state를 공유하게된다
+  사용하려는쪽에서 useContext(context)를 해주면 해당 state가 나온다
+   */
+    let [tab_ani_switch,set_ani_switch] = useState(false)
+    let [tab,setTab] = useState(0)
+    let context_stock = useContext(stock_context);
+    console.log(context_stock) // 잘받아온 모오습
+
     let [input_data,set_input_data] = useState();
     let [alert_switch,set_alert_switch] = useState(true)
     let { id } = useParams();
@@ -34,6 +50,9 @@ function ItemDetail({props,stock,setStock}){
       return(
         <p>재고 : ${props}</p>
       )
+    }
+    function tabClick(state){
+      // if(state[])
     }
     /*
     LifeCycle-Hook? => class vs function
@@ -67,6 +86,19 @@ function ItemDetail({props,stock,setStock}){
    },[])
   //  useEffect(()=>{}) //중복으로 써도된다 하지만 실행순서는 알다시피 코드블럭순 => 2번째인자로 재렌더링의 조건을 넣어줄수있다
 
+  function TabContent(props){
+    /*
+    렌더링이 될때 스위치를 true로 바꿈으로써 ani실행 false->true일때.
+    useEffect를 안쓰면 경고창에 tabcontent를 렌더링하는동안 itemdetail컴포넌트를 렌더링할수 없다고나옴
+    왤까? 그냥 안전하게 useEffect를 써주자
+    */
+    useEffect(()=>{
+      props.set_ani_switch(true)
+    },[])
+    return(
+      <div>{`${props.tab}번째 Content입니다`}</div>
+    )
+  }
     return(
     <div className="container">
         <Box>
@@ -104,6 +136,26 @@ function ItemDetail({props,stock,setStock}){
             }}>back</button>
           </div>
         </div>
+        {/* bootstraop문법 default? => 말그대로 방문시 어떤탭이눌린채로 보여줄꺼냐를 의미 */}
+        <Nav className="mt-5" variant="tabs" defaultActiveKey="link-0">
+          <Nav.Item>
+            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(0);}} eventKey="link-0">Tap1</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(1);}} eventKey="link-1">Tap2</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(2);}} eventKey="link-2">Tap3</Nav.Link>
+          </Nav.Item>
+        </Nav>
+
+        {/*
+        CSStransition을 import해왓으면 컴포넌트를 import해온건데 효과를 주고싶은 컴포넌트를 감싸주면된다 컨텍스트마냥
+        그러고 in className's' timeout속성을 주면되는데 in은 switch같은느낌이다 true일때만 효과를 주는 그런느낌.
+         */}
+        <CSSTransition in={tab_ani_switch} classNames="myTransition" timeout={500}>
+          <TabContent tab={tab} set_ani_switch={set_ani_switch} />
+        </CSSTransition>
       </div>
     )
 }

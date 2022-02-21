@@ -6,7 +6,16 @@ import { BrowserRouter,Switch,Route } from 'react-router-dom'
 import Main from './Component/Main'
 import NavBar from './Component/NavBar'
 import ItemDetail from './Component/ItemDetail';
+import Cart from './Component/Cart'
 import data from './data'
+//Context API
+export let stock_context = React.createContext();
+/*
+이용하려는쪽에서 useContext(context)를 해줘야하기때문에 context를 export (default가 아니니 {}로 import해와야)
+context를 여러개만들어서 각각 다른 state를 공유할 범위를 커스텀해서 짜줄수있다
+*/
+
+
 function App() {
   let [shopData ,setShopData] = useState(data)
   let [stock, setStock] = useState(100)
@@ -29,8 +38,12 @@ function App() {
     <div className="App">
       <NavBar/>
       <Switch>
-        <Route exact path="/" render={()=><Main props={shopData} setProps={setShopData}/>} />
-        <Route path="/detail/:id" render={()=> <ItemDetail props={shopData} setStock={setStock} stock={stock}/>} />
+        {/* Context API */}
+        <stock_context.Provider value={stock}>
+          <Route exact path="/" render={()=><Main props={shopData} setProps={setShopData}/>} />
+          <Route path="/detail/:id" render={()=> <ItemDetail props={shopData} setStock={setStock} stock={stock}/>} />
+          <Route path="/cart" render={() => <Cart />}/>
+        </stock_context.Provider>
         {/* <Route path="/:id">
           <div>sdfds</div>
         </Route> */}
