@@ -16,15 +16,15 @@ $title_color: #33b2ff;
 
 // CSS 셀렉터
 
-div h4 {
-  color: aqua;
-}
+// div h4 {
+//   color: aqua;
+// }
 //둘은 동일 즉 셀렉터가 길어지면 한눈에 파악하기 어려울수있으니 직관적으로 나눌수있다 (scss 내스팅문법)
-div {
-  h4 {
-    color: aqua;
-  }
-}
+// div {
+//   h4 {
+//     color: aqua;
+//   }
+// }
 
 .scssV2 {
   background-color: pink;

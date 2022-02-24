@@ -6,7 +6,8 @@ import { connect , useDispatch, useSelector} from 'react-redux';
 const Cart = (props) => {
     console.log('props')
     //받아온 인자안에 아까 product(맨밑)이라는 key로 store데이터가 들어온 모오습
-    console.log(props)
+    let cartItem = props.cartItem
+    let product = props.product
 
     /*
     -------> useSelector useDispatch <-------
@@ -23,8 +24,8 @@ const Cart = (props) => {
 
 
     let [closeHover, setCloseHover] = useState([])
-    function dispatch(action,index=false,name){
-        return props.dispatch({type:action,index,payload:{name}})
+    function dispatch(action,index=false,payload){
+        return props.dispatch({type:action,index,payload})
         /*
         dispatch='보내다' 즉 내가 원하는 상태를 보내는의미인데 redux를 통해 가져온 store에 dispatch라는
         메소드를 이용하는데 dispatch는 인자로 reducer에 보낼 action을 받아서 보내는데 => index.html확인
@@ -46,42 +47,47 @@ const Cart = (props) => {
                 {/* 짜여진 뼈대를 보고 thead tbody tr th가 뭘의미하는지 파악해보자 */}
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>No.</th>
                     <th>상품명</th>
                     <th>수량</th>
                     <th>변경</th>
                 </tr>
                 </thead>
-                {props.product.map((item,index) => {
+                {cartItem.length !== 0 ?
+                cartItem.map((item,index) => {
+                    let obj = {category:item.category,clothes:item.clothes,name:item.name}
                     return(
                         <tbody key={`key${index}`}>
                             <tr>
-                                <td>{item.id}</td>
+                                <td>{item.no}</td>
                                 <td onMouseOver={()=>{
                                     let copy = []
                                     copy.push(index)
                                     setCloseHover(copy)
                                 }}>{item.name}
-                                    {closeHover[0] === index ? <button onClick={()=>dispatch('remove',index,item.name)}>x</button> : null}
+                                    {closeHover[0] === index ? <button onClick={()=>dispatch('cartRemove',index,item.name)}>x</button> : null}
                                 </td>
-                                <td>{item.quan}</td>
                                 <td>
-                                    <button onClick={()=>dispatch('+',index)}>+</button>
-                                    <button onClick={()=>dispatch('-',index)}>-</button>
+                                    <span>{item.quan}</span>
+                                    {item.stock < 0 ? <span>재고부족!</span> : null }
+                                </td>
+                                <td>
+                                    <button onClick={()=>dispatch('+',index,obj)}>+</button>
+                                    <button onClick={()=>dispatch('-',index,obj)}>-</button>
                                 </td>
                             </tr>
                         </tbody>
                     )
-                })}
+                })
+                : <tbody>
+                    <tr>
+                        <td>{null}</td>
+                        <td>장바구니가 비었습니다</td>
+                    </tr>
+                </tbody>
+                }
             </Table>
-            {props.alertState ?
-            <div className="scssV2">
-                <p>지금 구매시 신규할인 20%!</p>
-                {/* dispatch2로 하면 안먹히는데 그럼 dispatch함수는 1개여야하나? */}
-                <button onClick={()=>dispatch(false)} className="mt-3">close</button>
-            </div>
-            : null
-            }
+            {/* 이자리 */}
         </div>
     );
 };
@@ -101,7 +107,7 @@ function reduxTest(store){
     return {
         // props화 해서 리턴 => 사용하는 컴포넌트쪽에선 받아온 인자에 product key에 value안에 store정보가 들어있겟지?
         product:store.reducerImport1,
-        alertState : store.reducerImport2
+        cartItem : store.reducerImport2
         // 그럼 Cart 컴포넌트 안에 받는 props는 2개가있겟지?
     }
 }
@@ -118,3 +124,12 @@ connect(어떤형태로 store를 props화 시킬건지 정하는 함수)(그렇�
 /* --------------방법2---------------(useSelector,useDispatch사용법)*/
 
 // export default Cart; => 위처럼 connect로 store를 props화시키는 함수는 필요없음
+
+// props ?
+//     <div className="scssV2">
+//         <p>지금 구매시 신규할인 20%!</p>
+//         {/* dispatch2로 하면 안먹히는데 그럼 dispatch함수는 1개여야하나? */}
+//         <button onClick={()=>dispatch(false)} className="mt-3">close</button>
+//     </div>
+//     : null
+    

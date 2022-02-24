@@ -7,6 +7,7 @@ import { propTypes } from 'react-bootstrap/esm/Image'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import '../Css/Detail.scss'
+import sizeInfo from '../dummydata/sizeInfo'
 import {stock_context} from '../App'
 import { connect } from 'react-redux'
 // scss란 무엇일까?
@@ -21,6 +22,8 @@ const Title = styled.h4`
 // 하나의 청사진만있으면 원하는건 이렇게 props를 뚫어서 쓸수있겟네? 더다양한기능이있을까? => 공식문서참조
 
 function ItemDetail(props){
+  console.log('sad')
+  console.log(sizeInfo)
   function dispatch(type,payload){
     props.dispatch({type,payload})
   }
@@ -33,28 +36,25 @@ function ItemDetail(props){
     let [tab_ani_switch,set_ani_switch] = useState(false)
     let [tab,setTab] = useState(0)
     let context_stock = useContext(stock_context);
-    console.log(context_stock) // 잘받아온 모오습
+    // console.log(context_stock) // 잘받아온 모오습
 
     let [input_data,set_input_data] = useState();
     let [alert_switch,set_alert_switch] = useState(true)
-    let { id } = useParams();
+    let {id,category,clothes,name} = useParams();
+
+    let clothesArray = props.product[category][clothes]
+    let [item] = clothesArray.filter(item => item['name'] === name)
     /*
     let obj = useParams();
     obj.id => 내가찾는거 즉 useParams()함수는 내 parmas가담긴 obj를 return하는듯
     */
     let history = useHistory();
-    let [item] = props.props.filter(item => item.id === Number(id))
     /*
     filter를 쓴이유 => id를 parameter로 받아서 만약에 전체 data의 index로 detail페이지를 render한다면
     정렬기능이나 이런걸 추가했을때 index로하면 렌더되는 페이지가 id에따라 나와야하는데 정렬로인해 배열 순서가 바뀌어서
     결과가 다르게나올수있다 그러니. id params에 담긴 값에 매칭되는 데이터를 콕 찾아서 넣기위해서 필터썻음
     */
    
-    function StockInfo({props}){
-      return(
-        <p>재고 : {props}</p>
-      )
-    }
     function tabClick(state){
       // if(state[])
     }
@@ -74,6 +74,8 @@ function ItemDetail(props){
       컴포넌트가 마운트될때(등장) + 컴포넌트가 update될때 실행됨
       => 지금은 ItemDetail 컴포넌트 내에 썻기때문에 해당 컴포넌트가 마운트,update될때마다 콘솔이 찍히겟지?
       console.log(111)
+      언마운트시에는 콜백함수안에 함수를 리턴하면 되는듯, 그리고 2번째인자로 state영역을 정해주지 않는다면
+      모든렌더링에서 useEffect함수가 실행될것.
     })
     */
    useEffect(()=>{
@@ -84,7 +86,7 @@ function ItemDetail(props){
      그래서 unmount부분에 clearTimeout을 해서 setTimeout함수의 동작을 취소시키는거지
      ex)console.log('wake')가 2초뒤에 나오는데 2초가 안되서 페이지를 나가면 나간페이지에서 console 이 뜬다 clearTimeout하면 안뜬다.
      */
-     let timer = setTimeout(()=>{set_alert_switch(false)},2000) //마운트시(등장)
+     let timer = setTimeout(()=>{set_alert_switch(false)},1000) //마운트시(등장)
      return function unmout(){ clearTimeout(timer) } //언마운트시(퇴장)
      //언마운트시 function을 리턴하는형태가 언마운트의 형태인듯 테스트한결과 일단은 둘다실행되긴함
    },[])
@@ -99,59 +101,67 @@ function ItemDetail(props){
     useEffect(()=>{
       props.set_ani_switch(true)
     },[])
+    let src;
+    if(props.tab === 0){
+      if(category === 'Outer') src=sizeInfo.Outer
+      if(category === 'Top') src=sizeInfo.Top
+      if(category === 'Bottom') src=sizeInfo.Bottom
+      if(category === 'Shose') src=sizeInfo.Shose
+    }
+    if(props.tab === 1) src='https://www.lancome.co.kr/on/demandware.static/-/Sites-lancome-kr-Library/ko_KR/dwb7a7e888/homepage/sampling/180228_img.jpg'
     return(
-      <div>{`${props.tab}번째 Content입니다`}</div>
+      <div className="mt-5">
+        <img src={`${src}`} width="60%" height="60%"></img>
+      </div>
     )
   }
     return(
     <div className="container">
         <Box>
           {/* 속성에 js-code를 안쓸꺼면 그냥 string으로 해도되겟지? react짜봣자너 */}
-          <Title color="blue">title</Title>
+          {/* <Title color="blue">title</Title>
           <Title color="red">title</Title>
-          <Title className="scss">title</Title>
+          <Title className="scss">title</Title> */}
           {/* state값이 바뀌니 재렌더링이 되는 모오오습 */}
-          {input_data}<input onKeyUp={(e)=>set_input_data(e.target.value)}/>
-          {alert_switch ?<>
+
+          {/* {alert_switch ?<>
             <div className="scssV2">Alert Content</div>
             <div className="scssV3">Extend Test</div>
             <div className="scssV4">@mixin - @include</div>
             </>
-           : null}
+           : null} */}
 
         </Box>
         <div className="row">
           <div className="col-md-6">
-            <img alt="notImg" src={`https://codingapple1.github.io/shop/shoes${Number(id)+1}.jpg`} width="100%"/>
+            <img alt="notImg" src={`${item.img}`} width="100%"/>
           </div>
           <div className="col-md-6 mt-4">
-            <h4 className="pt-5">{item.title}</h4>
+            <Title color="red" className="pt-5">{item.name}</Title>
             <p>{item.content}</p>
             <p>{item.price}</p>
-            <StockInfo props={props.stock}/>
-            <button className="btn btn-danger" onClick={()=>{
+            <p>재고 : {item.stock}</p>
+            <div className="mt-5">
+            <button className="btn ms-2 btn-secondary" onClick={()=>{
               // 항상 state를 다시 set할때는 사본을 만들어서 하는게 안전하고 중요.
-              let copy = props.stock;
-              props.setStock(copy-1);
-              dispatch('cartAdd',{name:item.title});
+              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock});
               history.push('/cart')
             }}>주문하기</button>
-            <button className="btn btn-danger" onClick={()=>{
+            <button className="btn ms-2 btn-secondary">장바구니</button>
+            <button className="btn ms-2 btn-secondary" onClick={()=>{
                 history.goBack();
                 //history hook의 사용법은 react-router-dom 공식문서참조! 
             }}>back</button>
+            </div>
           </div>
         </div>
         {/* bootstraop문법 default? => 말그대로 방문시 어떤탭이눌린채로 보여줄꺼냐를 의미 */}
         <Nav className="mt-5" variant="tabs" defaultActiveKey="link-0">
           <Nav.Item>
-            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(0);}} eventKey="link-0">Tap1</Nav.Link>
+            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(0);}} eventKey="link-0">상세정보</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(1);}} eventKey="link-1">Tap2</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(2);}} eventKey="link-2">Tap3</Nav.Link>
+            <Nav.Link onClick={()=>{set_ani_switch(false); setTab(1);}} eventKey="link-1">배송/환불</Nav.Link>
           </Nav.Item>
         </Nav>
 

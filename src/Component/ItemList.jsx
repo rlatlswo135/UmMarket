@@ -1,15 +1,26 @@
-function ItemList({props}){
+import {Link} from 'react-router-dom'
+
+function ItemList({props,category,clothes}){
     //bootstrap문법
+    if(props.length === 0){
+      return(
+        <div>물건이 없음</div>
+      )
+    }
+    function clickEvent(index){
+      console.log(index)
+    }
+    console.log(`item list`)
     return(
       //그러니 얘도 Link를 /detail/item.id로 보내야겟지? 
-      props.map(item => {
+      props.map((item,index) => {
         return ( 
-          <div key={item.id} className="col-md-4">
-            <img src={`${item.img}`} width="100%"></img>
-            <h4>{item.title}</h4>
+          <Link key={`link-${item.name}`} to={`/detail/${category}/${clothes}/${item.name}`} className="col-md-4">
+            <img src={`${item.img}`} width="100%" height="300px"></img>
+            <h4 className="pt-4">{item.name}</h4>
+            <h6>{item.price+'원'}</h6>
             <p>{item.content}</p>
-            <span>{item.price}</span>
-          </div>
+          </Link>
         )})
       )}
 

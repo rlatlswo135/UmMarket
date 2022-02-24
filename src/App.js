@@ -1,12 +1,17 @@
 /* eslint-disable*/
 
-import React, {useState} from 'react'
+import React, {useState , lazy , Suspense} from 'react'
 import './Css/App.css';
 import { BrowserRouter,Switch,Route } from 'react-router-dom'
 import Main from './Component/Main'
 import NavBar from './Component/NavBar'
-import ItemDetail from './Component/ItemDetail';
-import Cart from './Component/Cart'
+import Home from './Component/Home'
+import DummyData from './dummydata/data'
+import jumboImage from './dummydata/jumbotImage'
+// import ItemDetail from './Component/ItemDetail';
+
+let ItemDetail = lazy(()=>import('./Component/ItemDetail'))
+let Cart = lazy(() => import('./Component/Cart'))
 import data from './data'
 //Context API
 export let stock_context = React.createContext();
@@ -17,7 +22,7 @@ context를 여러개만들어서 각각 다른 state를 공유할 범위를 커�
 
 
 function App() {
-  let [shopData ,setShopData] = useState(data)
+  let [shopData ,setShopData] = useState(DummyData)
   let [stock, setStock] = useState(100)
   /*
   App => ItemDetail => StockInfo 순으로 state전달 계단식으로밖에안됨
@@ -40,9 +45,12 @@ function App() {
       <Switch>
         {/* Context API */}
         <stock_context.Provider value={stock}>
-          <Route exact path="/" render={()=><Main props={shopData} setProps={setShopData}/>} />
-          <Route path="/detail/:id" render={()=> <ItemDetail props={shopData} setStock={setStock} stock={stock}/>} />
+          <Route exact path="/" render={()=><Home image={jumboImage.home}/>} />
+          <Route path="/list/:category/:clothes" render={()=><Main props={shopData} setProps={setShopData}/>} />
+          <Suspense fallback={<div>Loading...</div>}>
+          <Route exact path="/detail/:category/:clothes/:name" render={()=> <ItemDetail props={shopData} setStock={setStock} stock={stock}/>} />
           <Route path="/cart" render={() => <Cart />}/>
+          </Suspense>
         </stock_context.Provider>
         {/* <Route path="/:id">
           <div>sdfds</div>
