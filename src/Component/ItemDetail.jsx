@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext,memo } from 'react'
 import { CSSTransition } from'react-transition-group'
 //css에 transition 기능을 좀더 쉽게사용하게하는 라이브러리 => 그럼원래의 사용법도 중요하게 알아둬야겟지?
 import {Nav} from 'react-bootstrap'
@@ -22,8 +22,6 @@ const Title = styled.h4`
 // 하나의 청사진만있으면 원하는건 이렇게 props를 뚫어서 쓸수있겟네? 더다양한기능이있을까? => 공식문서참조
 
 function ItemDetail(props){
-  console.log('sad')
-  console.log(sizeInfo)
   function dispatch(type,payload){
     props.dispatch({type,payload})
   }
@@ -35,10 +33,10 @@ function ItemDetail(props){
    */
     let [tab_ani_switch,set_ani_switch] = useState(false)
     let [tab,setTab] = useState(0)
+    let [cart_switch,set_cart_switch] = useState(0)
     let context_stock = useContext(stock_context);
     // console.log(context_stock) // 잘받아온 모오습
 
-    let [input_data,set_input_data] = useState();
     let [alert_switch,set_alert_switch] = useState(true)
     let {id,category,clothes,name} = useParams();
 
@@ -93,6 +91,8 @@ function ItemDetail(props){
   //  useEffect(()=>{}) //중복으로 써도된다 하지만 실행순서는 알다시피 코드블럭순 => 2번째인자로 재렌더링의 조건을 넣어줄수있다
 
   function TabContent(props){
+    console.log('tabContent')
+    console.log(props)
     /*
     렌더링이 될때 스위치를 true로 바꿈으로써 ani실행 false->true일때.
     useEffect를 안쓰면 경고창에 tabcontent를 렌더링하는동안 itemdetail컴포넌트를 렌더링할수 없다고나옴
@@ -101,6 +101,7 @@ function ItemDetail(props){
     useEffect(()=>{
       props.set_ani_switch(true)
     },[])
+
     let src;
     if(props.tab === 0){
       if(category === 'Outer') src=sizeInfo.Outer
@@ -147,12 +148,22 @@ function ItemDetail(props){
               dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock});
               history.push('/cart')
             }}>주문하기</button>
-            <button className="btn ms-2 btn-secondary">장바구니</button>
+            <button className="btn ms-2 btn-secondary" onClick={()=>{
+              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock});
+              set_cart_switch(1);
+              setTimeout(()=>set_cart_switch(0),800)
+            }}>장바구니</button>
             <button className="btn ms-2 btn-secondary" onClick={()=>{
                 history.goBack();
                 //history hook의 사용법은 react-router-dom 공식문서참조! 
             }}>back</button>
             </div>
+            {
+              cart_switch !== 0 ?
+              <CSSTransition classNames="myTransition"in={tab_ani_switch} timeout={500}>
+                <div className="mt-5">추가 되었습니다</div>
+              </CSSTransition> : null}
+
           </div>
         </div>
         {/* bootstraop문법 default? => 말그대로 방문시 어떤탭이눌린채로 보여줄꺼냐를 의미 */}

@@ -32,6 +32,10 @@ function reducerImport2(store=array, action){
       copy.push(cart)
     }
   }
+  if(action.type === 'cartRemove'){
+    console.log(`cartItem remove`)
+    copy.splice(action.index,1)
+  }
   if(action.type === '+'){
     editCartQuan('+')
   }

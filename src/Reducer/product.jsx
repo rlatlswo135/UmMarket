@@ -15,6 +15,9 @@ function reducerImport1(store = defaultStore,action={payload:''}){
     let filtered = clothesArray.filter(item => item.name === name)
     let index = clothesArray.indexOf(filtered[0])
     let target = copy[category][clothes][index].stock
+    if(type === 'cartRemove'){
+      copy[category][clothes][index].stock  = action.payload.quan + action.payload.stock
+    }
     if(type === '+'){
       copy[category][clothes][index].stock ++;
     }
@@ -32,8 +35,10 @@ function reducerImport1(store = defaultStore,action={payload:''}){
 
     if(action.type === 'cartAdd'){
       //재고목록에서 cartAdd => stock -1해야
-      console.log('cartAdd => 재고')
       editStock('-')
+    }
+    if(action.type === 'cartRemove'){
+      editStock('cartRemove')
     }
     if(action.type === '+'){
       let {category,clothes,name} = action.payload

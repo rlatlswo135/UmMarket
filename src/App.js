@@ -20,7 +20,6 @@ export let stock_context = React.createContext();
 context를 여러개만들어서 각각 다른 state를 공유할 범위를 커스텀해서 짜줄수있다
 */
 
-
 function App() {
   let [shopData ,setShopData] = useState(DummyData)
   let [stock, setStock] = useState(100)
@@ -45,7 +44,7 @@ function App() {
       <Switch>
         {/* Context API */}
         <stock_context.Provider value={stock}>
-          <Route exact path="/" render={()=><Home image={jumboImage.home}/>} />
+          <Route exact path="/" render={()=><Home image={jumboImage}/>} />
           <Route path="/list/:category/:clothes" render={()=><Main props={shopData} setProps={setShopData}/>} />
           <Suspense fallback={<div>Loading...</div>}>
           <Route exact path="/detail/:category/:clothes/:name" render={()=> <ItemDetail props={shopData} setStock={setStock} stock={stock}/>} />

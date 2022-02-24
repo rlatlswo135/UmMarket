@@ -153,18 +153,18 @@ let DummyData = {
         '캐주얼& 스니커즈':[
             {
                 id:0,
-                name:'캐주얼1',
-                content:'캐주얼1입니다',
-                img:'img태그',
-                price:30000,
+                name:'소가죽 캐주얼 스니커즈',
+                content:'소가죽?!',
+                img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa7vdPJXFuPc-VubC_sn8T1YgszjoowArmsw&usqp=CAU',
+                price:'70,000',
                 stock:40
             },
             {
                 id:0,
-                name:'캐주얼2',
-                content:'캐주얼2입니다',
-                img:'img태그',
-                price:30000,
+                name:'DC 스트릿 스니커즈',
+                content:'배트맨 팬이라면',
+                img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQa0aD3niPcQ3cLA52zROwJiMYowxL-O9Qzcw&usqp=CAU',
+                price:'122,000',
                 stock:40
             }
         ],

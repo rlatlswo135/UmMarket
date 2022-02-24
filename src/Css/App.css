@@ -53,3 +53,18 @@ a {
     transform: rotate(360deg);
   }
 }
+
+a:link {
+  color: black;
+}
+a:visited {
+  color: black;
+}
+
+.shopCart:hover {
+  cursor: pointer;
+}
+
+.cart-item:hover {
+  cursor: pointer;
+}

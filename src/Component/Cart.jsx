@@ -1,9 +1,14 @@
 import React,{useState} from 'react';
 import {Table} from 'react-bootstrap'
 import { connect , useDispatch, useSelector} from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import  '../Css/App.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 
 const Cart = (props) => {
+    let history = useHistory();
     console.log('props')
     //받아온 인자안에 아까 product(맨밑)이라는 key로 store데이터가 들어온 모오습
     let cartItem = props.cartItem
@@ -25,6 +30,7 @@ const Cart = (props) => {
 
     let [closeHover, setCloseHover] = useState([])
     function dispatch(action,index=false,payload){
+        console.log(`action = ${action} index = ${index}`)
         return props.dispatch({type:action,index,payload})
         /*
         dispatch='보내다' 즉 내가 원하는 상태를 보내는의미인데 redux를 통해 가져온 store에 dispatch라는
@@ -49,8 +55,8 @@ const Cart = (props) => {
                 <tr>
                     <th>No.</th>
                     <th>상품명</th>
-                    <th>수량</th>
-                    <th>변경</th>
+                    <th>수량 (재고)</th>
+                    <th>수량변경</th>
                 </tr>
                 </thead>
                 {cartItem.length !== 0 ?
@@ -60,15 +66,19 @@ const Cart = (props) => {
                         <tbody key={`key${index}`}>
                             <tr>
                                 <td>{item.no}</td>
-                                <td onMouseOver={()=>{
-                                    let copy = []
-                                    copy.push(index)
-                                    setCloseHover(copy)
-                                }}>{item.name}
-                                    {closeHover[0] === index ? <button onClick={()=>dispatch('cartRemove',index,item.name)}>x</button> : null}
+                                <td onMouseLeave={()=>{
+                                    setCloseHover([])
+                                }} onMouseOver={()=> setCloseHover([index])}>
+                                    <span className="cart-item" onClick={()=>history.push(`/detail/${obj.category}/${obj.clothes}/${item.name}`)}>{item.name}</span>
+                                    {closeHover[0] === index ? 
+                                    <FontAwesomeIcon icon={faTrashCan} className="cart-item ms-5" onClick={()=>{
+                                        console.log('remove');
+                                        dispatch('cartRemove',index,{...obj,quan:item.quan,stock:item.stock})
+                                    }}>x</FontAwesomeIcon> 
+                                    : null}
                                 </td>
                                 <td>
-                                    <span>{item.quan}</span>
+                                    <span>{item.quan}({item.stock})</span>
                                     {item.stock < 0 ? <span>재고부족!</span> : null }
                                 </td>
                                 <td>
@@ -82,7 +92,9 @@ const Cart = (props) => {
                 : <tbody>
                     <tr>
                         <td>{null}</td>
+                        <td>{null}</td>
                         <td>장바구니가 비었습니다</td>
+                        <td>{null}</td>
                     </tr>
                 </tbody>
                 }
