@@ -13,7 +13,8 @@ const Cart = (props) => {
     //받아온 인자안에 아까 product(맨밑)이라는 key로 store데이터가 들어온 모오습
     let cartItem = props.cartItem
     let product = props.product
-
+    console.log(`!@#@!@#`)
+    console.log(cartItem)
     /*
     -------> useSelector useDispatch <-------
     let useSelector = useSelector((store) => store);
@@ -26,11 +27,24 @@ const Cart = (props) => {
     장점? => 밑에서 따로 connect를 이용해서 store를 props화 할필요도없고, 그러니 참조할때 props.dispatch등 이럴필요도없이
     변수에 저장해놧으니 useSelector.name 등 간편하게 참조를할수있을거다
     */
-
+    function editPrice(price){
+        let array = String(price).split('').reverse()
+        let result = [];
+        let count = array.length%3 !==0 ? Math.trunc((array.length/3)+1) : array.length/3
+    
+        for(let i=1; i<=count; i++){
+            console.log(`i=${i} count=${count}`)
+                result.push(array.splice(0,3))
+            if(i !== count){
+                result.push(',')
+            }
+        }
+    
+        return result.flat().reverse().join('')
+    }
 
     let [closeHover, setCloseHover] = useState([])
     function dispatch(action,index=false,payload){
-        console.log(`action = ${action} index = ${index}`)
         return props.dispatch({type:action,index,payload})
         /*
         dispatch='보내다' 즉 내가 원하는 상태를 보내는의미인데 redux를 통해 가져온 store에 dispatch라는
@@ -56,11 +70,18 @@ const Cart = (props) => {
                     <th>No.</th>
                     <th>상품명</th>
                     <th>수량 (재고)</th>
+                    <th>가격</th>
                     <th>수량변경</th>
                 </tr>
                 </thead>
                 {cartItem.length !== 0 ?
                 cartItem.map((item,index) => {
+                    let PRICE = item.price
+                    let NUM = Number(PRICE.split(',').join(''))*item.quan
+                    let EDITPRICE = editPrice(NUM)
+                    let TOTAL = EDITPRICE+`₩`
+                    // 이부분 마무리 밑에 총액뜨게. => state를 하나더만들어서 토탈관리를해야하나?
+                    // state = cartItem store에 담겨있는애들 price의 총액
                     let obj = {category:item.category,clothes:item.clothes,name:item.name}
                     return(
                         <tbody key={`key${index}`}>
@@ -82,6 +103,9 @@ const Cart = (props) => {
                                     {item.stock < 0 ? <span>재고부족!</span> : null }
                                 </td>
                                 <td>
+                                    {TOTAL}
+                                </td>
+                                <td>
                                     <button onClick={()=>dispatch('+',index,obj)}>+</button>
                                     <button onClick={()=>dispatch('-',index,obj)}>-</button>
                                 </td>
@@ -95,10 +119,13 @@ const Cart = (props) => {
                         <td>{null}</td>
                         <td>장바구니가 비었습니다</td>
                         <td>{null}</td>
+                        <td>{null}</td>
                     </tr>
                 </tbody>
                 }
             </Table>
+            <div>표 테이블에 얼만지 들어가야됨;</div>
+            <div>총가격 얼마인지 들어가야됨</div>
             {/* 이자리 */}
         </div>
     );

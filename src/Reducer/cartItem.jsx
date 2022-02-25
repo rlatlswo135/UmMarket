@@ -15,9 +15,9 @@ function reducerImport2(store=array, action){
     }
   }
   if(action.type === "cartAdd"){
-    let {name,category,clothes,stock} = action.payload
+    let {name,category,clothes,stock,price} = action.payload
     let filterd = copy.filter(item => item.name === name)
-    let cart = {no:1,name,category,clothes,stock,quan:1}
+    let cart = {no:1,name,category,price,clothes,stock,quan:1}
 
     if(filterd.length !== 0){
       let findIndex = copy.indexOf(filterd[0])

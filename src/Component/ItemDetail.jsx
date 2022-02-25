@@ -116,6 +116,8 @@ function ItemDetail(props){
       </div>
     )
   }
+  console.log('price')
+  console.log(item.price)
     return(
     <div className="container">
         <Box>
@@ -140,16 +142,16 @@ function ItemDetail(props){
           <div className="col-md-6 mt-4">
             <Title color="red" className="pt-5">{item.name}</Title>
             <p>{item.content}</p>
-            <p>{item.price}</p>
+            <p>{item.price+'₩'}</p>
             <p>재고 : {item.stock}</p>
             <div className="mt-5">
             <button className="btn ms-2 btn-secondary" onClick={()=>{
               // 항상 state를 다시 set할때는 사본을 만들어서 하는게 안전하고 중요.
-              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock});
+              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock,price:item.price});
               history.push('/cart')
             }}>주문하기</button>
             <button className="btn ms-2 btn-secondary" onClick={()=>{
-              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock});
+              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock,price:item.price});
               set_cart_switch(1);
               setTimeout(()=>set_cart_switch(0),800)
             }}>장바구니</button>
