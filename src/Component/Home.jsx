@@ -26,7 +26,6 @@ function Home(props){
                 image:props.image.home2
             }
         }}/>
-        <div>신상품</div>
         </>
     )
 }

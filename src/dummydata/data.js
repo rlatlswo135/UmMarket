@@ -7,7 +7,7 @@ let DummyData = {
                 content:'클래식한 gray컬러',
                 img:'https://image.sisun.com/upload/goods/G2021111500002_003_1(103212).JPG',
                 price:'130,000',
-                stock:40
+                stock:0
             },
             {
                 id:1,
@@ -113,7 +113,8 @@ let DummyData = {
                 name:'이벳필드 후드티',
                 content:'로고로 포인트를 준',
                 img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDVVR92Pcbl6KRBwpNcGuopPPSNh0irhKdBw&usqp=CAU',
-                price:'42,000'
+                price:'42,000',
+                stock:10
             },
             {
                 id:0,

@@ -93,7 +93,7 @@ const Cart = (props) => {
                                     {closeHover[0] === index ? 
                                     <FontAwesomeIcon icon={faTrashCan} className="cart-item ms-5" onClick={()=>{
                                         dispatch('cartRemove',index,{...obj,quan:item.quan,stock:item.stock})
-                                    }}>x</FontAwesomeIcon> 
+                                    }}></FontAwesomeIcon> 
                                     : null}
                                 </td>
                                 <td>

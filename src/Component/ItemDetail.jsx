@@ -37,7 +37,7 @@ function ItemDetail(props){
     let context_stock = useContext(stock_context);
     // console.log(context_stock) // 잘받아온 모오습
 
-    let [alert_switch,set_alert_switch] = useState(true)
+    let [alert_switch,set_alert_switch] = useState(false)
     let {id,category,clothes,name} = useParams();
 
     let clothesArray = props.product[category][clothes]
@@ -114,6 +114,11 @@ function ItemDetail(props){
       </div>
     )
   }
+  
+  function stockAlert(){
+    set_alert_switch(true)
+    let timer = setTimeout(()=>set_alert_switch(false),500)
+  }
 
     return(
     <div className="container">
@@ -140,17 +145,25 @@ function ItemDetail(props){
             <Title color="red" className="pt-5">{item.name}</Title>
             <p>{item.content}</p>
             <p>{item.price+'₩'}</p>
-            <p>재고 : {item.stock >= 0 ? item.stock : 0 }</p>
+            <p>{item.stock > 0 ? `재고 : ${item.stock}` : <span className="text-danger">품절</span> }</p>
             <div className="mt-5">
             <button className="btn ms-2 btn-secondary" onClick={()=>{
               // 항상 state를 다시 set할때는 사본을 만들어서 하는게 안전하고 중요.
-              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock,price:item.price});
-              history.push('/cart')
+              if(item.stock <= 0){
+                stockAlert()
+              }else{
+                dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock,price:item.price});
+                history.push('/cart')
+              }
             }}>주문하기</button>
             <button className="btn ms-2 btn-secondary" onClick={()=>{
-              dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock,price:item.price});
-              set_cart_switch(1);
-              setTimeout(()=>set_cart_switch(0),800)
+              if(item.stock<=0){
+                stockAlert()
+              }else{
+                dispatch('cartAdd',{item,name:item.name,category,clothes,stock:item.stock,price:item.price});
+                set_cart_switch(1);
+                setTimeout(()=>set_cart_switch(0),800)
+              }
             }}>장바구니</button>
             <button className="btn ms-2 btn-secondary" onClick={()=>{
                 history.goBack();
@@ -162,7 +175,7 @@ function ItemDetail(props){
               <CSSTransition classNames="myTransition"in={tab_ani_switch} timeout={500}>
                 <div className="mt-5">추가 되었습니다</div>
               </CSSTransition> : null}
-
+              {alert_switch ? <div className="mt-5 text-danger">품절되었습니다.</div> : null}
           </div>
         </div>
         {/* bootstraop문법 default? => 말그대로 방문시 어떤탭이눌린채로 보여줄꺼냐를 의미 */}

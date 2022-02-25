@@ -44,7 +44,7 @@ reducer함수가 여러개 => 즉 store가 여러개일때는 combineReducers �
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename=''>
     <Provider store={store}>
       {/* 이렇게 Provider 컴포넌트로 감싸진 컴포넌트늘은 모두 store를 공유할수 있게된다 */}
       <App />

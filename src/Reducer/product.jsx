@@ -39,12 +39,10 @@ function reducerImport1(store = defaultStore,action={payload:''}){
       editStock('cartRemove')
     }
     if(action.type === '+'){
-      let {category,clothes,name} = action.payload
       console.log('장바구니 + 재고는 -')
       editStock('-')
     }
     if(action.type === '-'){
-      let {category,clothes} = action.payload
       console.log('장바구니 - 재고는 +')
       editStock('+')
     }
@@ -56,7 +54,6 @@ function reducerImport1(store = defaultStore,action={payload:''}){
     (아니라면 state가 전해진 순으로 타고타고타고올라가서 찾아야된다;)
     계단식으로 state,setState를 전달할 필요도없으니 엄청 좋다.
     */
-   console.log(copy)
     return copy
   }
 

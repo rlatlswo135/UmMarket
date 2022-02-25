@@ -6,7 +6,6 @@ function reducerImport2(store=array, action){
   let copy = {...store}
 
   function totalPrice(array){
-    console.log('cartItem => totalPrice')
     if(array.length === 0) return 0;
     let ARRAY = []
     for(let item of array){
