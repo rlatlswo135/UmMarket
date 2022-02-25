@@ -68,3 +68,29 @@ a:visited {
 .cart-item:hover {
   cursor: pointer;
 }
+
+/* CSStrainsition에서 정한 class -enter => 동작시작시 적용할 CSS */
+.jumbTransition-enter {
+  opacity: 0;
+}
+
+/* class -enter-active => 동작중에 적용할 CSS */
+.jumbTransition-enter-active {
+  opacity: 1;
+  transition: all 500ms;
+  /* 변할때 딜레이를 주는느낌 -> 0.5s에 걸쳐서 변함 */
+}
+
+/* 그럼 enter에서는 투명도가 0이고 동작시에는 1이니까 0->1로 변하는 transition이겟지? */
+
+.alertTitle {
+  color: yellow;
+  font-size: 3.5em;
+  font-weight: 700;
+  margin-bottom: 3%;
+}
+.alertContent {
+  color: yellow;
+  font-size: 3em;
+  font-weight: 800;
+}

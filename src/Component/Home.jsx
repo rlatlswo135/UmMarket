@@ -10,13 +10,19 @@ function Home(props){
         <>
         <Jumbotron image={{
             image:{
-                content:payload,
+                content:{
+                    title:`Style is`,
+                    content:`a man's life`
+                },
                 image:props.image.home
             }
         }}/>
         <Jumbotron image={{
             image:{
-                content:payload,
+                content:{
+                    title:`The style`,
+                    content:`I'll give you`
+                },
                 image:props.image.home2
             }
         }}/>

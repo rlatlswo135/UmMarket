@@ -91,8 +91,6 @@ function ItemDetail(props){
   //  useEffect(()=>{}) //중복으로 써도된다 하지만 실행순서는 알다시피 코드블럭순 => 2번째인자로 재렌더링의 조건을 넣어줄수있다
 
   function TabContent(props){
-    console.log('tabContent')
-    console.log(props)
     /*
     렌더링이 될때 스위치를 true로 바꿈으로써 ani실행 false->true일때.
     useEffect를 안쓰면 경고창에 tabcontent를 렌더링하는동안 itemdetail컴포넌트를 렌더링할수 없다고나옴
@@ -116,8 +114,7 @@ function ItemDetail(props){
       </div>
     )
   }
-  console.log('price')
-  console.log(item.price)
+
     return(
     <div className="container">
         <Box>
@@ -143,7 +140,7 @@ function ItemDetail(props){
             <Title color="red" className="pt-5">{item.name}</Title>
             <p>{item.content}</p>
             <p>{item.price+'₩'}</p>
-            <p>재고 : {item.stock}</p>
+            <p>재고 : {item.stock >= 0 ? item.stock : 0 }</p>
             <div className="mt-5">
             <button className="btn ms-2 btn-secondary" onClick={()=>{
               // 항상 state를 다시 set할때는 사본을 만들어서 하는게 안전하고 중요.

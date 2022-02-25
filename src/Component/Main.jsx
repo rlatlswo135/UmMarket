@@ -3,6 +3,7 @@ import {Button,Nav,Tabs,Tab} from 'react-bootstrap'
 import React, {useEffect, useState, lazy, Suspense} from 'react';
 
 let ItemList = lazy(()=>import('./ItemList'))
+import '../Css/App.css'
 import styled from 'styled-components'
 import axios from 'axios'
 import {useParams,Link, useHistory} from 'react-router-dom'
@@ -13,7 +14,7 @@ const AlertImg=styled.div`
   width:100%;
   height:100%;
   color:white;
-  padding:100px 0px;
+  padding:50px 0px;
   background-image:url('https://p4.wallpaperbetter.com/wallpaper/172/356/933/summer-sea-wallpaper-hd-2560%C3%971600-wallpaper-preview.jpg');
   background-size: cover;
   background-position: center;
@@ -44,8 +45,8 @@ function Main({props,setProps}) {
   function Alert(){
     return(
       <AlertImg>
-        <h1>Summer Sale</h1>
-        <p>asdsaasdss</p>
+        <h1 className="alertTitle">Summer Sale</h1>
+        <p className="alertContent">up to 50 percent</p>
       </AlertImg>
     )
   }

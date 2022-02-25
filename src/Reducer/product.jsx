@@ -18,15 +18,13 @@ function reducerImport1(store = defaultStore,action={payload:''}){
     if(type === 'cartRemove'){
       copy[category][clothes][index].stock  = action.payload.quan + action.payload.stock
     }
+    //cart쪽에서 재고부족알림까지 +하고 마이너스시 재고가 마이너스에 맞춰서움직여야하는데
+    //0부터 시작한다 => 수정후 메인페이지에 추천아이템 이런거 떠주면 마무리될듯? 
     if(type === '+'){
       copy[category][clothes][index].stock ++;
     }
     if(type === '-'){
-      if(target !== 0){
         copy[category][clothes][index].stock --;
-      }else{
-        console.log('재고0')
-      }
     }
    }
     let copy = {...store}

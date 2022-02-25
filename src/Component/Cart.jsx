@@ -4,17 +4,17 @@ import { connect , useDispatch, useSelector} from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import  '../Css/App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faTrashCan,faPlus,faMinus } from '@fortawesome/free-solid-svg-icons'
 
 
 const Cart = (props) => {
     let history = useHistory();
-    console.log('props')
+    console.log('props => cartItem')
     //받아온 인자안에 아까 product(맨밑)이라는 key로 store데이터가 들어온 모오습
-    let cartItem = props.cartItem
+    let cartItem = props.cartItem['cartItem']
+    let finalPrice = props.cartItem['finalPrice']
     let product = props.product
-    console.log(`!@#@!@#`)
-    console.log(cartItem)
+    
     /*
     -------> useSelector useDispatch <-------
     let useSelector = useSelector((store) => store);
@@ -33,7 +33,6 @@ const Cart = (props) => {
         let count = array.length%3 !==0 ? Math.trunc((array.length/3)+1) : array.length/3
     
         for(let i=1; i<=count; i++){
-            console.log(`i=${i} count=${count}`)
                 result.push(array.splice(0,3))
             if(i !== count){
                 result.push(',')
@@ -79,7 +78,7 @@ const Cart = (props) => {
                     let PRICE = item.price
                     let NUM = Number(PRICE.split(',').join(''))*item.quan
                     let EDITPRICE = editPrice(NUM)
-                    let TOTAL = EDITPRICE+`₩`
+                    let total_price = EDITPRICE+`₩`
                     // 이부분 마무리 밑에 총액뜨게. => state를 하나더만들어서 토탈관리를해야하나?
                     // state = cartItem store에 담겨있는애들 price의 총액
                     let obj = {category:item.category,clothes:item.clothes,name:item.name}
@@ -93,7 +92,6 @@ const Cart = (props) => {
                                     <span className="cart-item" onClick={()=>history.push(`/detail/${obj.category}/${obj.clothes}/${item.name}`)}>{item.name}</span>
                                     {closeHover[0] === index ? 
                                     <FontAwesomeIcon icon={faTrashCan} className="cart-item ms-5" onClick={()=>{
-                                        console.log('remove');
                                         dispatch('cartRemove',index,{...obj,quan:item.quan,stock:item.stock})
                                     }}>x</FontAwesomeIcon> 
                                     : null}
@@ -103,11 +101,11 @@ const Cart = (props) => {
                                     {item.stock < 0 ? <span>재고부족!</span> : null }
                                 </td>
                                 <td>
-                                    {TOTAL}
+                                    {total_price}
                                 </td>
                                 <td>
-                                    <button onClick={()=>dispatch('+',index,obj)}>+</button>
-                                    <button onClick={()=>dispatch('-',index,obj)}>-</button>
+                                    <FontAwesomeIcon onClick={()=>dispatch('+',index,obj)} className="cart-item" icon={faPlus}/>
+                                    <FontAwesomeIcon onClick={item.quan !== 1 ? ()=>dispatch('-',index,obj) : null} className="ms-3 cart-item" icon={faMinus}/>
                                 </td>
                             </tr>
                         </tbody>
@@ -124,8 +122,7 @@ const Cart = (props) => {
                 </tbody>
                 }
             </Table>
-            <div>표 테이블에 얼만지 들어가야됨;</div>
-            <div>총가격 얼마인지 들어가야됨</div>
+            <div>총 가격 : {`${editPrice(finalPrice)}₩`}</div>
             {/* 이자리 */}
         </div>
     );
